@@ -31,6 +31,40 @@ combostyle.theme_create('combostyle', parent='alt',
 
 combostyle.theme_use('combostyle') 
 
+class ToolTip(object):
+
+    def __init__(self, widget):
+        self.widget = widget
+        self.tipwindow = None
+        self.id = None
+        self.x = self.y = 0
+
+    def showtip(self, text):
+        "Display text in tooltip window"
+        self.text = text
+        if self.tipwindow or not self.text:
+            return
+        x, y, cx, cy = self.widget.bbox("insert")
+        x = x + self.widget.winfo_rootx() + -50
+        y = y + cy + self.widget.winfo_rooty() + 40
+        self.tipwindow = tw = tk.Toplevel(self.widget)
+        tw.wm_overrideredirect(1)
+        tw.wm_geometry("+%d+%d" % (x, y))
+        label = tk.Label(tw, text=self.text, justify='left',
+                      background="#3f5946", relief='solid', borderwidth=1,
+                      foreground="White",
+                      font=("Helvetica", "12", "bold"),
+                      wraplength=200)
+        label.pack(ipadx=1)
+
+
+    def hidetip(self):
+        tw = self.tipwindow
+        self.tipwindow = None
+        if tw:
+            tw.destroy()
+
+
 ##### make layout #####
 
 frm_top = tk.Frame(window, bg='#308a48', width=910, height=200)
@@ -105,313 +139,15 @@ def calculate(*args):
 
     calc_perc()
 
+
     ## Rebuild header ##
-    for labs in frm_stats.winfo_children():
-        labs.destroy()
-    
-    lbl_dmg = tk.Label(master=frm_stats,  bg='#3f5946', fg="white" , text="Damage", font="Helvetica 10 bold")
-    lbl_dmg.grid(row=0, column=0, padx=15, pady=5)
-    dmg_numb = tk.Label(master=frm_stats, bg='#3f5946', fg="white", font="Helvetica 10 bold", text="")
-    dmg_numb["text"] = f"{Stats['Dmg']}"
-    dmg_numb.config(width=5)
-    dmg_numb.grid(row=0, column=1, padx=15, pady=5)
-
-    for c in range(0,2,1):
-        for r in range(1,13,1):
-            col = c * 2
-            row = r
-            keyn = (((c + 1) * 12) - 12) + r
-            if keyn < len(Stats.keys()):
-                key = list(Stats.keys())[keyn]
-                lbl_key = tk.Label(master=frm_stats, bg='#3f5946', fg="white", text=key, font="Helvetica 10 bold")
-                lbl_key.grid(row=row, column=col, padx=5, pady=10)
-                lbl_keyres = tk.Label(master=frm_stats, bg='#3f5946', fg="white", font="Helvetica 10 bold", text="")
-                lbl_keyres["text"] = f"{Stats[key]}"
-                lbl_keyres.config(width=5)
-                lbl_keyres.grid(row=row, column=f"{col + 1}", padx=5, pady=10)
-
-    for labs in frm_skills.winfo_children():
-        labs.destroy()
-    
-    Skills={
-        'Class':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},},
-
-        'Hunter':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Assassin':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Saboteur':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Acolyte':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Elementalist':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Soldier':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Vanguard':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Warlord':{'Decimate':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'Charge a Powerfull Swing. Deals physical Damage and inflicts stun.','Dmg': (3 * Stats['Atk']) + ( 3.5 * Stats['Fire']), 'Cooldown': 14},
-            'Throwing Axe':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'Throw a heavy axe dealing physical damage and inflicting Snare','Dmg': 50 + (1.5 * Stats['Atk']), 'Cooldown': 21},
-            'Shockwave':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 20 + (0.5*Stats['Atk']) + (5 * Stats['Earth']), 'Cooldown': 0},
-            'Frenzy Swirl':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 750 + (10*Stats['Atk']), 'Cooldown': 48},
-        },
-
-        'Cleric':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Aquamancer':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Alchemist':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Dreadknight':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Sniper':{ 
-            'Heavy Shot':{'img':'.\image\skill\Sn1.png' ,'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 1000 + (5 * Stats['Speed']), 'Cooldown': 3 * (1 - (Stats['Spell_Haste']/100))},
-            'Air Shot':{'img':'.\image\skill\Sn2.png' ,'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 240 + (1.25 * Stats['Speed'] + (1.65 * Stats['Wind'])), 'Cooldown': 2.5 * (1 - (Stats['Spell_Haste']/100))},
-            'Vortex Shot':{'img':'.\image\skill\Sn3.png' ,'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 250 +(2 * Stats['Speed'] + 3.5 * Stats['Wind']), 'Cooldown': 2.5 * (1 - (Stats['Spell_Haste']/100))},
-            'Volley':{'img':'.\image\skill\Sn5.png', 'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 100 +(0.5 * Stats['Speed']), 'Cooldown': 16.5 * (1 - (Stats['Spell_Haste']/100))},
-        },
-
-        'Monk':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Dragonslayer':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Necromancer':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Timeweaver':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Shinobi':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Ronin':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Paladin':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Paladin Wrath':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Paladin Mercy':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Paladin Protector':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Pyromancer':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
+    rebuild_stats()
 
 
-    }
-
-    ### Rebuild Skills ###
-    for r in range(1,3,1):
-        for c in range(0,6,1):
-            row = (r * 3) - 3  
-            k = (((r * 5) - 5) + c)
-            print(k)
-            if k < len(Skills[clicked_c.get()]):
-                skill = list(Skills[clicked_c.get()].keys())[k]
-                print(skill)
-                imgpath = Skills[clicked_c.get()][skill]['img']
+    deal_skills()
 
 
-                img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((35, 35), Image.ANTIALIAS))
-                lbl_skill = tk.Label(frm_skills, image=img_skill, bg='#3f5946')
-                lbl_skill.img = img_skill 
-                lbl_skill.grid(row=row, column=c, padx=10, pady=5)
 
-                ### Dmg ###
-                dmg= math.ceil(float("{:.1f}".format(Skills[clicked_c.get()][skill]['Dmg'])))
-                print(Skills[clicked_c.get()][skill]['Dmg'])
-                lbl_dmg = tk.Label(frm_skills, 
-                text = f"Dmg: {dmg}",
-                bg='#3f5946', fg="white", font="Helvetica 10 bold"
-                )
-                lbl_dmg.grid(row=row + 1 , column=c, padx=5, pady=0)
-
-                    ### Cdr ###
-                cool= float("{:.2f}".format(Skills[clicked_c.get()][skill]['Cooldown']))
-                lbl_dmg = tk.Label(frm_skills, 
-                text = f"Cooldown: {cool}",
-                bg='#3f5946', fg="white", font="Helvetica 10 bold"
-                )
-                lbl_dmg.grid(row=row + 2, column=c, padx=5, pady=0)
 
 def class_change(*args):
 
@@ -556,9 +292,358 @@ def clear(*args):
     calculate()
 
 
+def CreateToolTip(widget, text):
+    toolTip = ToolTip(widget)
+    def enter(event):
+        toolTip.showtip(text)
+    def leave(event):
+        toolTip.hidetip()
+    widget.bind('<Enter>', enter)
+    widget.bind('<Leave>', leave)
+
+
+def deal_skills(*args):
+    Skills={
+        'Class':{'Base1':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},},
+
+        'Hunter':{'Base1':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Assassin':{'Base1':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Saboteur':{'Base1':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Acolyte':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Elementalist':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Soldier':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Vanguard':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Warlord':{'Decimate':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Charge a Powerfull Swing. Deals physical Damage and inflicts stun.','Dmg': (3 * Stats['Atk']) + ( 3.5 * Stats['Fire']), 'Cooldown': 14},
+            'Throwing Axe':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Throw a heavy axe dealing physical damage and inflicting Snare','Dmg': 50 + (1.5 * Stats['Atk']), 'Cooldown': 21},
+            'Shockwave':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 20 + (0.5*Stats['Atk']) + (5 * Stats['Earth']), 'Cooldown': 0},
+            'Frenzy Swirl':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 750 + (10*Stats['Atk']), 'Cooldown': 48},
+            'Enrage':{'type': 'buff' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Become fueled by rage! Increase Attack by 50%  while reducing defense by 50%','Duration': 20 , 'Cooldown': 0.25, 'Defense': -0.5, 'Atk': 0.5},
+        },
+
+        'Cleric':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Aquamancer':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Alchemist':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Dreadknight':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Sniper':{ 
+            'Heavy Shot':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png' ,'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 1000 + (5 * Stats['Speed']), 'Cooldown': 3 * (1 - (Stats['Spell_Haste']/100))},
+            'Air Shot':{'type': 'dmg' , 'img':'.\image\skill\Sn2.png' ,'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 240 + (1.25 * Stats['Speed'] + (1.65 * Stats['Wind'])), 'Cooldown': 2.5 * (1 - (Stats['Spell_Haste']/100))},
+            'Vortex Shot':{'type': 'dmg' , 'img':'.\image\skill\Sn3.png' ,'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 250 +(2 * Stats['Speed'] + 3.5 * Stats['Wind']), 'Cooldown': 2.5 * (1 - (Stats['Spell_Haste']/100))},
+            'Volley':{'type': 'dmg' , 'img':'.\image\skill\Sn5.png', 'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 100 +(0.5 * Stats['Speed']), 'Cooldown': 16.5 * (1 - (Stats['Spell_Haste']/100))},
+        },
+
+        'Monk':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Dragonslayer':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Necromancer':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Timeweaver':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Shinobi':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Ronin':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Paladin':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Paladin Wrath':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Paladin Mercy':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Paladin Protector':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+
+        'Pyromancer':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        },
+    }
+    ### Rebuild Skills ###
+
+    for labs in frm_skills.winfo_children():
+        labs.destroy()
+
+    for r in range(1,3,1):
+        for c in range(0,6,1):
+            row = (r * 3) - 3  
+            k = (((r * 5) - 5) + c)
+            #print(k)
+            if k < len(Skills[clicked_c.get()]):
+                skill = list(Skills[clicked_c.get()].keys())[k]
+                #print(skill)
+                imgpath = Skills[clicked_c.get()][skill]['img']
+
+                
+                img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((35, 35), Image.ANTIALIAS))
+                lbl_skill = tk.Label(frm_skills, image=img_skill, bg='#3f5946')
+                lbl_skill.img = img_skill 
+                lbl_skill.grid(row=row, column=c, padx=10, pady=5)
+
+                CreateToolTip(lbl_skill, Skills[clicked_c.get()][skill]['Skilltext'])
+
+                if Skills[clicked_c.get()][skill]['type'] == 'dmg' :
+                    ### Dmg ###
+                    dmg= math.ceil(float("{:.1f}".format(Skills[clicked_c.get()][skill]['Dmg'])))
+                    lbl_dmg = tk.Label(frm_skills, 
+                    text = f"Dmg: {dmg}",
+                    bg='#3f5946', fg="white", font="Helvetica 10 bold"
+                    )
+                    lbl_dmg.grid(row=row + 1 , column=c, padx=5, pady=0)
+
+                if Skills[clicked_c.get()][skill]['type'] == 'buff' :
+                    ### Duration ###
+                    Duration= math.ceil(float("{:.1f}".format(Skills[clicked_c.get()][skill]['Duration'])))
+                    lbl_dmg = tk.Label(frm_skills, 
+                    text = f"Duration: {Duration}",
+                    bg='#3f5946', fg="white", font="Helvetica 10 bold"
+                    )
+                    lbl_dmg.grid(row=row + 1 , column=c, padx=5, pady=0)
+
+                ### Cdr ###
+                cool= float("{:.2f}".format(Skills[clicked_c.get()][skill]['Cooldown']))
+                lbl_dmg = tk.Label(frm_skills, 
+                text = f"Cooldown: {cool}",
+                bg='#3f5946', fg="white", font="Helvetica 10 bold"
+                )
+                lbl_dmg.grid(row=row + 2, column=c, padx=5, pady=0)
+
+
+
+
+
+
+##### Rebuild Stats Information #####
+
+def rebuild_stats(*args):
+    for labs in frm_stats.winfo_children():
+        labs.destroy()
+    
+    lbl_dmg = tk.Label(master=frm_stats,  bg='#3f5946', fg="white" , text="Damage", font="Helvetica 10 bold")
+    lbl_dmg.grid(row=0, column=0, padx=15, pady=5)
+    dmg_numb = tk.Label(master=frm_stats, bg='#3f5946', fg="white", font="Helvetica 10 bold", text="")
+    dmg_numb["text"] = f"{Stats['Dmg']}"
+    dmg_numb.config(width=5)
+    dmg_numb.grid(row=0, column=1, padx=15, pady=5)
+
+    for c in range(0,2,1):
+        for r in range(1,13,1):
+            col = c * 2
+            row = r
+            keyn = (((c + 1) * 12) - 12) + r
+            if keyn < len(Stats.keys()):
+                key = list(Stats.keys())[keyn]
+                lbl_key = tk.Label(master=frm_stats, bg='#3f5946', fg="white", text=key, font="Helvetica 10 bold")
+                lbl_key.grid(row=row, column=col, padx=5, pady=10)
+                lbl_keyres = tk.Label(master=frm_stats, bg='#3f5946', fg="white", font="Helvetica 10 bold", text="")
+                lbl_keyres["text"] = f"{Stats[key]}"
+                lbl_keyres.config(width=5)
+                lbl_keyres.grid(row=row, column=f"{col + 1}", padx=5, pady=10)
+
+       
+
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+############################################################################################################################################################
+
 Stats={'Dmg': 0,'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
 'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0,'Threat': 0
 }
+
+Skill_toggle = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
 ############################################################################################################################################################
 ############################################################################################################################################################
@@ -770,14 +855,14 @@ clear.grid(row=0, column=3, padx=10, pady=10)
 
 ### Dont change this dictionary, you should change the one inside the calculate function ###
 Skills={
-    'Class':{'Base1':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-    'Base2':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-    'Base3':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-    'Base4':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-    'Base5':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-    'Base6':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-    'Base7':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-    'Base8':{'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},},
+    'Class':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+    'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+    'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+    'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+    'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+    'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+    'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+    'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},},
 }
 
 
@@ -788,26 +873,33 @@ for r in range(1,3,1):
 
         if k < len(Skills[clicked_c.get()]):
             skill = list(Skills[clicked_c.get()].keys())[k]
-            img_skill = ImageTk.PhotoImage(Image.open(Skills[clicked_c.get()][skill]['img']).resize((35, 35), Image.ANTIALIAS))
-            lbl_skill = tk.Label(frm_skills, image=img_skill, bg='#3f5946')
-            lbl_skill.img = img_skill 
-            lbl_skill.grid(row=row, column=c, padx=10, pady=5)
+            print(skill)
+            imgpath = Skills[clicked_c.get()][skill]['img']
 
-            ### Dmg ###
-            dmg= math.ceil(float("{:.1f}".format(Skills[clicked_c.get()][skill]['Dmg'])))
-            lbl_dmg = tk.Label(frm_skills, 
-            text = f"Dmg: {dmg}",
-            bg='#3f5946', fg="white", font="Helvetica 10 bold"
-            )
-            lbl_dmg.grid(row=row + 1 , column=c, padx=5, pady=0)
+            if Skills[clicked_c.get()][skill]['type'] == 'dmg' :
+                img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((35, 35), Image.ANTIALIAS))
+                lbl_skill = tk.Label(frm_skills, image=img_skill, bg='#3f5946')
+                lbl_skill.img = img_skill 
+                lbl_skill.grid(row=row, column=c, padx=10, pady=5)
 
-            ### Cdr ###
-            cool= float("{:.2f}".format(Skills[clicked_c.get()][skill]['Cooldown']))
-            lbl_dmg = tk.Label(frm_skills, 
-            text = f"Cooldown: {cool}",
-            bg='#3f5946', fg="white", font="Helvetica 10 bold"
-            )
-            lbl_dmg.grid(row=row + 2, column=c, padx=5, pady=0)
+                CreateToolTip(lbl_skill, Skills[clicked_c.get()][skill]['Skilltext'])
+
+                 ### Dmg ###
+                dmg= math.ceil(float("{:.1f}".format(Skills[clicked_c.get()][skill]['Dmg'])))
+                print(Skills[clicked_c.get()][skill]['Dmg'])
+                lbl_dmg = tk.Label(frm_skills, 
+                text = f"Dmg: {dmg}",
+                 bg='#3f5946', fg="white", font="Helvetica 10 bold"
+                )
+                lbl_dmg.grid(row=row + 1 , column=c, padx=5, pady=0)
+
+                ### Cdr ###
+                cool= float("{:.2f}".format(Skills[clicked_c.get()][skill]['Cooldown']))
+                lbl_dmg = tk.Label(frm_skills, 
+                text = f"Cooldown: {cool}",
+                bg='#3f5946', fg="white", font="Helvetica 10 bold"
+                )
+                lbl_dmg.grid(row=row + 2, column=c, padx=5, pady=0)
 
 
 
