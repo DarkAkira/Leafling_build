@@ -11,6 +11,7 @@ In Construction:
 Future Adds:
   - Damage reduction percentages (based on defense and resist). 
   - Damage calculation. 
+  - Class buffs being passed to the stats info.
 
 
 A special thanks to all the Twelfth Surveying Artemian Regiment clan discord for their help in this project.
