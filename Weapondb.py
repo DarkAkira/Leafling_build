@@ -62,8 +62,8 @@ Weapon={
     'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 50,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 6},
 
     'Crimson Arch':{'Class': ['Sniper'],
-    'Dmg': 680, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 60,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 30,'Luck': 0,
-    'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 50,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
+    'Dmg': 680, 'HP': 0,'Mana': 0,'Atk': 15,'Mag': 15,'Defense': 0,'Resist': 0,'Speed': 60,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 30,'Luck': 0,
+    'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
 
 ### Swords ###
 
@@ -126,12 +126,15 @@ Weapon={
 ### Katana ###
 
     'Sakura Petal':{'Class': ['Ronin'],
-    'Dmg': 400, 'HP': 0,'Mana': 0,'Atk': 25,'Mag': 0,'Defense': 15,'Resist': 15,'Speed': 25,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 10,'Luck': 0,
     'Dodge': 0, 'Fire': 0,'Water': 0,'Wind': 30,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
 
     'Kage-Hi':{'Class': ['Ronin'],
     'Dmg': 300, 'HP': 0,'Mana': 0,'Atk': 50,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 5,'Tenacity': 0,'Crit': 0,'Luck': 0,
     'Dodge': 0, 'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 30, 'Threat': 0},
+    
+    'Crimson-Tech Katana':{'Class': ['Ronin'],
+    'Dmg': 450, 'HP': 0,'Mana': 0,'Atk': 40,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 40,'Spell_Haste': 0,'Lifesteal': 20,'Tenacity': 0,'Crit': 10,'Luck': 0,
+    'Dodge': 0, 'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 35, 'Threat': 110},
 
 ### Wands ###
 
@@ -311,7 +314,7 @@ Offhand={
     'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
 
     'Dragonhide Deflector':{'Class': ['Soldier', 'Warlord', 'Vanguard', 'Dragonslayer', 'Dreadknight'],
-    'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 50,'Mag': 0,'Defense': 20,'Resist': 20,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
+    'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 50,'Mag': 0,'Defense': 25,'Resist': 25,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
     'Dodge': 0,'Fire': 50,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
 
     'Camelot':{'Class': ['Warlord', 'Vanguard', 'Dragonslayer', 'Dreadknight', 'Paladin','Paladin Wrath','Paladin Mercy','Paladin Protector'],

@@ -148,7 +148,6 @@ def calculate(*args):
 
 
 
-
 def class_change(*args):
 
     #### Get New item types for the class #################
