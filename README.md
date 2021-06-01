@@ -4,6 +4,9 @@ App written in python to help in equip builds for the game Leafling.
 A .rar has been added which contains the program as an executable. To run it you'll have to extract the folders and inside leafling_build look for the application (which has the leafling logo). Carefull that most Anti-virus will trigger to this file and remove it to quarentine since it is an unknown script :S either way the code is the same as in the .py file.
 
 
+Recently added: 
+  - Save/load build option so you don't have to manually insert everything everytime and can just load a premade build.
+
 Currently in the app:
   - Stats for Classes and Mythical Weapons, Armors, Off-hands, Accessories, Souls, Prefixes and Sufixes.
 
