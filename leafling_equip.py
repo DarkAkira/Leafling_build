@@ -1,8 +1,10 @@
 from PIL import Image, ImageTk
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 import Weapondb as db
 import math
+import os
 
 window = tk.Tk()
 window.geometry("910x750")
@@ -68,18 +70,21 @@ class ToolTip(object):
 ##### make layout #####
 
 frm_top = tk.Frame(window, bg='#308a48', width=910, height=200)
-frm_bot = tk.Frame(window, bg='black', width=910, height=550)
+frm_bot = tk.Frame(window, bg='black', width=910, height=530)
 
 frm_top.grid(row=0, sticky="ew")
 frm_bot.grid(row=1, sticky="nsew", pady=2.5)
 
 frm_class = tk.Frame(frm_top,  bg='blue', width=200, height=200)
-frm_skills = tk.Frame(frm_top, bg='#308a48', width=710, height=200)
+frm_skills = tk.Frame(frm_top, bg='#308a48', width=535, height=200)
+frm_buffs = tk.Frame(frm_top, bg='#308a48', width=175, height=200)
 
 frm_class.grid(row=0, column=0, sticky="ns")
 frm_class.grid_propagate(False)
 frm_skills.grid(row=0, column=2, sticky="nsew")
 frm_skills.grid_propagate(False)
+frm_buffs.grid(row=0, column=3, sticky="nsew")
+frm_buffs.grid_propagate(False)
 
 frm_items = tk.Frame(frm_bot, bg='#308a48', width=600, height=550)
 frm_stats = tk.Frame(frm_bot, bg='#308a48', width=310, height=550)
@@ -352,14 +357,14 @@ def deal_skills(*args):
             'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
         },
 
-        'Elementalist':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        'Elementalist':{
+            'Wildfire':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Wildfire\n\nIgnite your target and all nearby. Deals Magic damage each tick for the duration of 5s.','Dmg': (100 + (0.8*Stats['Mag']) + (1.6 * Stats['Fire'])), 'Cooldown': 3.6},
+            
+            'Chain Lightning':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Chain Lightning\n\nBlast your targets with lightning that bounces to nearby targets.\n\nHP:-400','Dmg': (400 + (2*Stats['Mag']) + (4*Stats['Wind'])), 'Cooldown': 3.6},
+            
+            'Quake':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Quake\n\nStrike at all enemies near your target with earth magic.\n\nInflicts stun','Dmg': (400 + (3*Stats['Mag']) + (5*Stats['Earth'])), 'Cooldown': 3.6},
+            
+            'Blizzard':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Blizzard\n\nSummons a Blizzard at your target\'s location.\n60% target speed reduced.','Dmg': (400+(3*Stats['Mag']) + (4*Stats['Water'])), 'Cooldown': 3.6},
         },
 
         'Soldier':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
@@ -561,16 +566,14 @@ def deal_skills(*args):
                 #print(skill)
                 imgpath = Skills[clicked_c.get()][skill]['img']
 
-                
-                img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((35, 35), Image.ANTIALIAS))
-                lbl_skill = tk.Label(frm_skills, image=img_skill, bg='#3f5946')
-                lbl_skill.img = img_skill 
-                lbl_skill.grid(row=row, column=c, padx=10, pady=5)
-
-                CreateToolTip(lbl_skill, Skills[clicked_c.get()][skill]['Skilltext'])
-
                 if Skills[clicked_c.get()][skill]['type'] == 'dmg' :
-                    ### Dmg ###
+                    img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((35, 35), Image.ANTIALIAS))
+                    lbl_skill = tk.Label(frm_skills, image=img_skill, bg='#3f5946')
+                    lbl_skill.img = img_skill 
+                    lbl_skill.grid(row=row, column=c, padx=10, pady=5)
+
+                    CreateToolTip(lbl_skill, Skills[clicked_c.get()][skill]['Skilltext'])
+
                     dmg= math.ceil(float("{:.1f}".format(Skills[clicked_c.get()][skill]['Dmg'])))
                     lbl_dmg = tk.Label(frm_skills, 
                     text = f"Dmg: {dmg}",
@@ -579,6 +582,12 @@ def deal_skills(*args):
                     lbl_dmg.grid(row=row + 1 , column=c, padx=5, pady=0)
 
                 if Skills[clicked_c.get()][skill]['type'] == 'buff' :
+                    img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((35, 35), Image.ANTIALIAS))
+                    lbl_skill = tk.Button(frm_skills, image=img_skill, bg='#3f5946', command=buff_click)
+                    lbl_skill.img = img_skill 
+                    lbl_skill.grid(row=row, column=c, padx=10, pady=5)
+
+                    CreateToolTip(lbl_skill, Skills[clicked_c.get()][skill]['Skilltext'])
                     ### Duration ###
                     Duration= math.ceil(float("{:.1f}".format(Skills[clicked_c.get()][skill]['Duration'])))
                     lbl_dmg = tk.Label(frm_skills, 
@@ -595,10 +604,122 @@ def deal_skills(*args):
                 )
                 lbl_dmg.grid(row=row + 2, column=c, padx=5, pady=0)
 
+###################
+
+def buff_click(*args):
+    print(frm_skills.winfo_children())
+
+#def deal_buffs(*args):
+    
+
+#### Save and retreive build definitions
+
+def ask_save():
+    global pop
+    pop = tk.Toplevel(window)
+    pop.title("Save Build")
+    pop.geometry("400x150")
+    pop.config(bg='#308a48')
+    pop.attributes('-topmost', 'true')
+
+    pop_lbl = tk.Label(pop, text="Choose your build name!",
+    font="Helvetica 15 bold",
+    fg="White",
+    bg="#3f5946")
+    pop_lbl.pack(pady=5)
+
+    frame_save = tk.Frame(pop, bg="#3f5946")
+    frame_save.pack()
+
+    save_entry = tk.Entry(frame_save, width=15)
+    save_entry.grid(row=0,column=0, sticky="w",padx=10)
+
+    saveb = tk.Button(frame_save, 
+    text="Save", 
+    bg='#3f5946',
+    fg='White',
+    font="Helvetica 12 bold",
+    command=lambda: save_build(save_entry.get())
+    )
+    saveb.grid(row=0, column=1, padx=10, pady=10)
+
+def save_build(save_name):
+
+    save_content = [clicked_c.get(), clicked_wep_p.get(), clicked_wep.get(), clicked_wep_s.get(), clicked_arm_p.get(), clicked_arm.get(), clicked_arm_s.get(), 
+    clicked_acc_p.get(), clicked_acc.get(), clicked_acc_s.get(), clicked_off_p.get(), clicked_off.get(), clicked_off_s.get(), clicked_soul.get()]
+
+    if os.path.exists('.\saves') == False :
+        os.mkdir('.\saves')
+
+    with open('.\saves\\'+ save_name +'.dat', 'w') as save:
+        for i in save_content:
+            save.write(i + '\n')
+
+    pop.destroy()
 
 
+def ask_load():
+    global pops
+    pops = tk.Toplevel(window)
+    pops.title("Load Build")
+    pops.geometry("400x150")
+    pops.config(bg='#308a48')
+    pops.attributes('-topmost', 'true')
 
+    pops_lbl = tk.Label(pops, text="Choose the build name you want to load!",
+    font="Helvetica 15 bold",
+    fg="White",
+    bg="#3f5946")
+    pops_lbl.pack(pady=5)
 
+    frame_load = tk.Frame(pops, bg="#3f5946")
+    frame_load.pack()
+
+    save_entry = tk.Entry(frame_load, width=15)
+    save_entry.grid(row=0,column=0, sticky="w",padx=10)
+
+    loadb = tk.Button(frame_load, 
+    text="Load", 
+    bg='#3f5946',
+    fg='White',
+    font="Helvetica 12 bold",
+    command=lambda: load_build(save_entry.get())
+    )
+    loadb.grid(row=0, column=1, padx=10, pady=10)
+
+def load_build(load_name):
+
+    load_content = []
+
+    if os.path.exists('.\saves\\'+ load_name +'.dat') == False :
+        messagebox.showwarning(title="Load Error", message="Build save not found!")
+    else:
+        with open('.\saves\\'+ load_name +'.dat', 'r') as save:
+            for i in save.readlines():
+                line = i.rstrip()
+                load_content.append(line)
+        
+        print(load_content)
+        clicked_c.set(load_content[0])
+        class_change()
+
+        clicked_wep_p.set(load_content[1])
+        clicked_wep.set(load_content[2])
+        clicked_wep_s.set(load_content[3]) 
+        clicked_arm_p.set(load_content[4]) 
+        clicked_arm.set(load_content[5])
+        clicked_arm_s.set(load_content[6])
+        clicked_acc_p.set(load_content[7])
+        clicked_acc.set(load_content[8])
+        clicked_acc_s.set(load_content[9])
+        clicked_off_p.set(load_content[10])
+        clicked_off.set(load_content[11])
+        clicked_off_s.set(load_content[12])
+        clicked_soul.set(load_content[13])
+
+        calculate()
+
+        pops.destroy()
 
 ##### Rebuild Stats Information #####
 
@@ -642,7 +763,11 @@ Stats={'Dmg': 0,'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 0,'Resist': 0,'Sp
 'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0,'Threat': 0
 }
 
-Skill_toggle = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+Buff_Stats={'Dmg': 0,'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
+'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0,'Threat': 0
+}
+
+Buff_toggle = [0]
 
 ############################################################################################################################################################
 ############################################################################################################################################################
@@ -841,6 +966,29 @@ font="Helvetica 12 bold",
 command=clear)
 clear.grid(row=0, column=3, padx=10, pady=10)
 
+### Make a save button ###
+
+mainmenu = tk.Menu(window)
+mainmenu.add_command(label = "Save Build", command=lambda: ask_save())
+mainmenu.add_command(label = "Load Build", command=lambda: ask_load())
+
+window.config(menu = mainmenu)
+
+#savebutton = tk.Button(frm_items, 
+#text="Save Build", 
+#bg='#3f5946',
+#fg='White',
+#font="Helvetica 12 bold",
+#command=lambda: ask_save())
+#savebutton.grid(row=10, column=0, padx=10, pady=10)
+
+#loadbutton = tk.Button(frm_items, 
+#text="Load Build", 
+#bg='#3f5946',
+#fg='White',
+#font="Helvetica 12 bold",
+#command=lambda: ask_load())
+#loadbutton.grid(row=10, column=3, padx=10, pady=10)
 
 ###########################################################################
 ###########################################################################
@@ -866,9 +1014,9 @@ Skills={
 
 
 for r in range(1,3,1):
-    for c in range(0,6,1):
+    for c in range(0,5,1):
         row = (r * 3) - 3  
-        k = (((r * 5) - 5) + c)
+        k = (((r * 4) - 4) + c)
 
         if k < len(Skills[clicked_c.get()]):
             skill = list(Skills[clicked_c.get()].keys())[k]

@@ -122,6 +122,11 @@ Weapon={
     'Slayer of Andariel':{'Class': ['Dragonslayer'],
     'Dmg': 310, 'HP': 0,'Mana': 0,'Atk': 40,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
     'Dodge': 0, 'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 40, 'Threat': 0},
+    
+    'Voidmother':{'Class': ['All'],
+    'Dmg': 1000, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
+    'Dodge': 0, 'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0, 'Perc':{'HP': 0.15, 'Mana': 0.15, 'Atk': 0.2,'Mag': 0.2,'Defense': 0.2,'Resist': 0.2,
+    'Speed': 0.2, 'Fire': 0.2,'Water': 0.2,'Wind': 0.2,'Earth': 0.2,'Light': 0.2,'Dark': 0.2 }},
 
 ### Katana ###
 
@@ -205,6 +210,10 @@ Weapon={
     'Andariel Wisdom':{'Class': ['Aquamancer','Necromancer','Pyromancer','Elementalist', 'Acolyte', 'Timeweaver'],
     'Dmg': 115, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 30,'Defense': 30,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 25,'Crit': 0,'Luck': 0,
     'Dodge': 0, 'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 30, 'Threat': 0, 'Perc':{'Mag': 0.15}},
+
+    'Molten Heart':{'Class': ['Elementalist','Pyromancer'],
+    'Dmg': 250, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 55,'Defense': 0,'Resist': 15,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
+    'Dodge': 0, 'Fire': 25,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
 
 ### Scythes ###
 
@@ -515,8 +524,8 @@ Base_Stats={
     'Necromancer':{'Dmg': 0,'HP': 17260,'Mana': 2085,'Atk': 39,'Mag': 83,'Defense': 83,'Resist': 83,'Speed': 40,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,
     'Luck': 0,'Dodge': 2,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0,'Threat': 0},
 
-    'Timeweaver':{'Dmg': 0,'HP': 12024,'Mana': 2085,'Atk': 44,'Mag': 112,'Defense': 44,'Resist': 44,'Speed': 123,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,
-    'Luck': 0,'Dodge': 10,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0,'Threat': 0},
+    'Timeweaver':{'Dmg': 0,'HP': 15250,'Mana': 2085,'Atk': 44,'Mag': 112,'Defense': 44,'Resist': 44,'Speed': 123,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,
+    'Luck': 0,'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0,'Threat': 0},
 
     'Shinobi':{'Dmg': 0,'HP': 14920,'Mana': 1200,'Atk': 137,'Mag': 5,'Defense': 29,'Resist': 29,'Speed': 157,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,
     'Luck': 0,'Dodge': 10,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0,'Threat': 0},
@@ -627,8 +636,7 @@ sufix ={
     'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
 
     'Spacetime':{'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 10,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
-    'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0, 'Perc':{'Atk': -0.1, 'Mag': -0.1, 'Speed': -0.1, 'Fire': -0.08,'Water': -0.08,
-    'Wind': -0.08,'Earth': -0.08,'Light': -0.08,'Dark': -0.08}},
+    'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0, 'Perc':{'Atk': -0.1, 'Mag': -0.1,'Defense': -0.1,'Resist': -0.1, 'Speed': -0.1, 'Fire': -0.08,'Water': -0.08, 'Wind': -0.08,'Earth': -0.08,'Light': -0.08,'Dark': -0.08}},
 
     'Crystal':{'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 15,'Resist': 15,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
     'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0, 'Perc':{'HP': 0.06, 'Mana': 0.06}},
@@ -654,6 +662,9 @@ sufix ={
 
     'Alta Nimbus':{'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
     'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 20,'Earth': 20,'Light': 0,'Dark': 0, 'Threat': 0},
+
+    'Midas':{'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 5,
+    'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
 }
 
 
