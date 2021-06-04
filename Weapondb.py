@@ -427,7 +427,7 @@ Accessory={
     'Dodge': 0,'Fire': 30,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 30, 'Threat': 0},
 
     'Fox Spirit Mask':{'Class': ['All'],
-    'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 40,'Mag': 40,'Defense': 0,'Resist': 0,'Speed': 40,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
+    'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 40,'Defense': 0,'Resist': 40,'Speed': 40,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
     'Dodge': 0,'Fire': 25,'Water': 0,'Wind': 25,'Earth': 0,'Light': 25,'Dark': 0, 'Threat': 0},
 
     'Fault Ring':{'Class': ['All'],
@@ -624,7 +624,7 @@ prefix ={
     'Deathbringer':{'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 20,'Luck': 0,
     'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
 
-    'Manaslayer':{'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 26,'Mag': 26,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
+    'Manaslayer':{'Dmg': 0, 'HP': 0,'Mana': 400,'Atk': 26,'Mag': 26,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
     'Dodge': 0,'Fire': 8,'Water': 8,'Wind': 8,'Earth': 8,'Light': 8,'Dark': 8, 'Threat': 0},
 
     'Glaring':{'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
@@ -639,7 +639,7 @@ prefix ={
     'Destroyer':{'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 50,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
     'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
     
-    'Eldritch':{'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 50,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
+    'Eldritch':{'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 60,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
     'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
 
     'Dauntless':{'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 50,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
