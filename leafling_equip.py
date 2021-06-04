@@ -145,8 +145,13 @@ def calculate(*args):
 
     calc_perc()
 
+    print(Stats)
+
+
+
     deal_buffs()
 
+    print(Buff_Stats)
     deal_skills()
 
     ## Rebuild header ##
@@ -268,14 +273,20 @@ def calc_perc():
         if final_stat > 0 : 
             
             Stats[s] = math.ceil(float("{:.1f}".format(final_stat))) #"{:.1f}".format
+            Buff_Stats[s] = math.ceil(float("{:.1f}".format(final_stat)))
         elif final_stat <= 0 and s == 'HP':
-                Stats[s] = 1
+            Stats[s] = 1
+            Buff_Stats[s] = 1
+
         else:
             Stats[s] = 0
+            Buff_Stats[s] = 0
         if final_stat >= 500 and s in ['Atk', 'Mag', 'Defense', 'Resist', 'Speed']:
             Stats[s] = 500
+            Buff_Stats[s] = 500
         if final_stat >= 250 and s in ['Fire', 'Water', 'Wind', 'Earth', 'Dark', 'Light']:
             Stats[s] = 250
+            Buff_Stats[s] = 250
 
 def clear(*args):
     clicked_wep_p.set("Prefix")
@@ -315,7 +326,7 @@ def create_buff(*args):
 
     MenuBttn = tk.Menubutton(frm_buffs, text = "Buffs", relief ="raised")
     Menu1 = tk.Menu(MenuBttn, tearoff = 0)
-
+    print(clicked_c.get(), list(db.Skills_b[clicked_c.get()].keys()))
     buff_present = []
     for i in list(db.Skills_b[clicked_c.get()].keys()):
         if db.Skills_b[clicked_c.get()][i]['type'] == 'buff':
@@ -378,43 +389,36 @@ def deal_buffs(*args):
 def deal_skills(*args):
     #### Dmging Skills
     Skills={
-        'Class':{'Base1':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},},
-
-        'Hunter':{'Base1':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        'Class':{
+            'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Base2':{'type': 'debuff' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Effect': '', 'Duration': 0, 'Cooldown': 0},
+            'Base3':{'type': 'heal' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Stat': 0, 'Cooldown': 0},
         },
 
-        'Assassin':{'Base1':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        'Hunter':{
+            'Ensnare':{'type': 'debuff', 'img':'.\image\skill\Hens.png', 'Skilltext': 'Strike at your target\'s heels, inflicting snare. Needs a dagger equiped','Effect': 'Snare', 'Duration': 4.2, 'Cooldown': 14.8},
+            'Sand Swipe':{'type': 'debuff', 'img':'.\image\skill\Hsand.png', 'Skilltext': 'Toss sand in front of you inflicting Blind on all enemies hit.','Effect': 'Blind', 'Duration': 2.5, 'Cooldown': 15},
+            'Scouting Flare':{'type': 'dmg', 'img':'.\image\skill\Hscout.png', 'Skilltext': 'Fire a light above you, dealing 1 true damage to all enemies within 12 tiles and revealing stealthed enemies. Must have a bow equiped.','Dmg': 1, 'Cooldown': 10},
+            'Quick Nock':{'type': 'dmg' , 'img':'.\image\skill\Hquick.png', 'Skilltext': 'nstantly fire an arrow at your target with no delay. Must have bow equiped.','Dmg': 100 + (0.8*Buff_Stats['Speed']), 'Cooldown': 0.1},
+            'Flurry':{'type': 'dmg' , 'img':'.\image\skill\Hflurry.png', 'Skilltext': 'Fire an entire quiver of arrows in quick succession','Dmg': 200 + (1.2*Buff_Stats['Speed']), 'Cooldown': 20},
+            'Pusruit':{'type': 'dmg' , 'img':'.\image\skill\Hpur.png', 'Skilltext': 'Leap to your target through the shadows and inflict stun. Must have dagger equiped.','Dmg': 40 + (0.85*Buff_Stats['Atk']), 'Cooldown': 28},
+            'Cripple':{'type': 'debuff',  'img':'.\image\skill\Hcripp.png', 'Skilltext': 'Drastically lower your targets speed, reducing their ability to dodge or run away. ','Effect': 'Lower speed.', 'Duration': 6, 'Cooldown': 11.9},
         },
 
-        'Saboteur':{'Base1':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        'Assassin':{
+            'Cross Strike':{'type': 'dmg' , 'img':'.\image\skill\AScross.png', 'Skilltext': 'Deal two rapid strikes with a 50% \chance to Critical Hit for 1.6x damage','Dmg': 250 + Buff_Stats['Atk'] + Buff_Stats['Dark'], 'Cooldown': 9.8},
+            'Shadowbind':{'type': 'debuff', 'img':'.\image\skill\ASshadow.png', 'Skilltext': 'Bind your target with their own shadow, setting them up for assasination.','Effect': 'Snare', 'Duration': 4, 'Cooldown': 18},
+            'Waylay':{'type': 'dmg' , 'img':'.\image\skill\ASway.png', 'Skilltext': 'Surprise attack your target inflicting Stun for 2.4 s.','Dmg': 100 + (2*Buff_Stats['Atk']), 'Cooldown': 22},
+            'Cloak of Shadows':{'type': 'debuff' , 'img':'.\image\skill\AScloak.png', 'Skilltext': 'Cloak yourself in a blanket of shadows.','Effect': 'Stealth', 'Duration': 12, 'Cooldown': 24.5},
+            'Shadowstep':{'type': 'debuff' , 'img':'.\image\skill\ASstep.png', 'Skilltext': 'Step through the shadows, instantly dashing in the direction you\'re moving','Effect': 'Dash', 'Duration': 0, 'Cooldown': 3},
+            'Volley of Knives':{'type': 'dmg' , 'img':'.\image\skill\ASvolley.png', 'Skilltext': 'Let loose a volley of throwing knives at your target.','Dmg': 225 + (Buff_Stats['Atk']), 'Cooldown': 6.2},
+            'Viper Strike':{'type': 'dmg' , 'img':'.\image\skill\Asviper.png', 'Skilltext': 'Strike your target with a poisoned blade and inflicting silence for 3 s.','Dmg': 25 + (0.35*Buff_Stats['Mag']) + (2*Buff_Stats['Water']), 'Cooldown': 26.5},
+            'Death Mark':{'type': 'debuff' , 'img':'.\image\skill\ASdeath.png', 'Skilltext': 'Mark your target for death, temporarily reducing their defences by 50% \for the duration.','Effect': '-50% \target Defense', 'Duration': 6.5, 'Cooldown': 35},
+        },
+
+        'Saboteur':{
+            'Beguile':{'type': 'dmg' , 'img':'.\image\skill\SAbeg.png', 'Skilltext': 'Surprise your foe with a gust of wind, knocking them backwards and inflicting stun for 16.5 s','Dmg': 125 + (Buff_Stats['Mag']) + (4*Buff_Stats['Wind']), 'Cooldown': 16.5},
+
         },
 
         'Acolyte':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
@@ -461,7 +465,7 @@ def deal_skills(*args):
             'Throwing Axe':{'type': 'dmg' , 'img':'.\image\skill\Waxe.png', 'Skilltext': 'Throw a heavy axe dealing physical damage, inflicting Snare and reducing target Speed by 80% \for the duration.','Dmg': 50 + (1.5 * Buff_Stats['Atk']), 'Cooldown': 21},
             'Shockwave':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 20 + (0.5*Buff_Stats['Atk']) + (5 * Buff_Stats['Earth']), 'Cooldown': 0},
             'Frenzy Swirl':{'type': 'dmg' , 'img':'.\image\skill\Wfren.png', 'Skilltext': 'Unleash a devastating whirlwind of blade and blood','Dmg': 750 + (10*Buff_Stats['Atk']), 'Cooldown': 48}, 
-            'Warlord tears':{'type': 'heal' , 'img':'.\image\skill\watears.png', 'Skilltext': 'The sweat the drips down your body replenishes you.','HP': (0.1*Buff_Stats['HP']) + (2.5 * Buff_Stats['Water']), 'Cooldown': 35},
+            'Warlord tears':{'type': 'heal' , 'img':'.\image\skill\watears.png', 'Skilltext': 'The sweat the drips down your body replenishes you.','HP': (0.01*Buff_Stats['HP']) + (2.5 * Buff_Stats['Water']), 'Cooldown': 35},
         },
 
         'Cleric':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
@@ -675,6 +679,29 @@ def deal_skills(*args):
                     bg='#3f5946', fg="white", font="Helvetica 10 bold"
                     )
                     lbl_heal.grid(row=row + 1 , column=c, padx=5, pady=0)
+
+                    ### Cdr ###
+                    cool= float("{:.2f}".format(Skills[clicked_c.get()][skill]['Cooldown']))
+                    lbl_cdr = tk.Label(frm_skills, 
+                    text = f"Cooldown: {cool}",
+                    bg='#3f5946', fg="white", font="Helvetica 10 bold"
+                    )
+                    lbl_cdr.grid(row=row + 2, column=c, padx=5, pady=0)
+
+                if Skills[clicked_c.get()][skill]['type'] == 'debuff' :
+                    img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((35, 35), Image.ANTIALIAS))
+                    lbl_skill = tk.Label(frm_skills, image=img_skill, bg='#3f5946')
+                    lbl_skill.img = img_skill 
+                    lbl_skill.grid(row=row, column=c, padx=10, pady=5)
+
+                    CreateToolTip(lbl_skill, Skills[clicked_c.get()][skill]['Skilltext'])
+                    
+                    deb = "Effect: " + str(Skills[clicked_c.get()][skill]['Effect'])
+                    lbl_debuff = tk.Label(frm_skills, 
+                    text =  deb,
+                    bg='#3f5946', fg="white", font="Helvetica 10 bold", justify='center', wraplength=150
+                    )
+                    lbl_debuff.grid(row=row + 1 , column=c, padx=5, pady=0)
 
                     ### Cdr ###
                     cool= float("{:.2f}".format(Skills[clicked_c.get()][skill]['Cooldown']))
