@@ -69,7 +69,7 @@ class ToolTip(object):
 
 ##### make layout #####
 
-frm_top = tk.Frame(window, bg='#308a48', width=910, height=200)
+frm_top = tk.Frame(window, bg='black', width=910, height=200)
 frm_bot = tk.Frame(window, bg='black', width=910, height=530)
 
 frm_top.grid(row=0, sticky="ew")
@@ -83,7 +83,7 @@ frm_class.grid(row=0, column=0, sticky="ns")
 frm_class.grid_propagate(False)
 frm_skills.grid(row=0, column=2, sticky="nsew")
 frm_skills.grid_propagate(False)
-frm_buffs.grid(row=0, column=3, sticky="nsew")
+frm_buffs.grid(row=0, column=3, sticky="nsew",padx =2.5)
 frm_buffs.grid_propagate(False)
 
 frm_items = tk.Frame(frm_bot, bg='#308a48', width=600, height=550)
@@ -141,15 +141,16 @@ def calculate(*args):
     for s in Stats.keys():
         newval = Base_stats[s] + db.Weapon[Wep][s] + db.prefix[Wepp][s] + db.sufix[Weps][s] + db.Armor[Arm][s] + db.prefix[Armp][s] + db.sufix[Arms][s] + db.Offhand[Off][s] + db.prefix[Offp][s] + db.sufix[Offs][s] + db.Accessory[Acc][s] + db.prefix[Accp][s] + db.sufix[Accs][s] + db.Soul[So][s] #+ db.prefix[Sop][s] + db.sufix[Sos][s]
         Stats[s] = newval
+        Buff_Stats[s] = newval
 
     calc_perc()
 
+    deal_buffs()
+
+    deal_skills()
 
     ## Rebuild header ##
     rebuild_stats()
-
-
-    deal_skills()
 
 
 
@@ -217,6 +218,8 @@ def class_change(*args):
     drop_soul.bind('<<ComboboxSelected>>', calculate)
     drop_soul.grid(row=9, column=1, padx=10, pady=10)
     
+    create_buff()
+
     calculate()
 
 def get_base(*args):
@@ -306,7 +309,74 @@ def CreateToolTip(widget, text):
     widget.bind('<Leave>', leave)
 
 
+def create_buff(*args):
+    for lab in frm_buffs.winfo_children():
+        lab.destroy()   
+
+    MenuBttn = tk.Menubutton(frm_buffs, text = "Buffs", relief ="raised")
+    Menu1 = tk.Menu(MenuBttn, tearoff = 0)
+
+    buff_present = []
+    for i in list(db.Skills_b[clicked_c.get()].keys()):
+        if db.Skills_b[clicked_c.get()][i]['type'] == 'buff':
+            buff_present.append(i)
+
+    for n in buff_present:
+        s_var[n] = tk.IntVar()
+        Menu1.add_checkbutton(label = n, variable = s_var[n], command=lambda: calculate())
+
+    MenuBttn["menu"] = Menu1
+
+    MenuBttn.grid(row=0, columnspan=6, pady=5, padx=5, sticky='nsew')
+    MenuBttn.config(width=26)
+
+
+def deal_buffs(*args):
+    for widget in frm_buffs.winfo_children():
+        if isinstance(widget, tk.Label):
+            widget.destroy()
+
+    buff_present = []
+    for i in list(db.Skills_b[clicked_c.get()].keys()):
+        if db.Skills_b[clicked_c.get()][i]['type'] == 'buff':
+            buff_present.append(i)
+    c=0
+    for n in buff_present:
+        print(n,s_var[n].get())
+        if s_var[n].get() == 1:
+            ### Put skill image below ###
+            imgpath = db.Skills_b[clicked_c.get()][n]['img']
+            img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((15, 15), Image.ANTIALIAS))
+            lbl_skill = tk.Label(frm_buffs, image=img_skill, bg='#3f5946')
+            lbl_skill.img = img_skill 
+
+            CreateToolTip(lbl_skill, db.Skills_b[clicked_c.get()][n]['Skilltext'])
+
+            print(c)
+
+            if c > 5:
+                col = c-6
+                lbl_skill.grid(row=2, column=col, padx=5, pady=2)
+            else:
+                
+                lbl_skill.grid(row=1, column=c, padx=5, pady=2)
+
+            c = c + 1
+
+
+            for s in Buff_Stats.keys():
+                s_buff = 0
+                if s in db.Skills_b[clicked_c.get()][n]:
+                    s_buff = s_buff + db.Skills_b[clicked_c.get()][n][s]
+                    
+                buff_s = Buff_Stats[s] * (1 + s_buff)
+
+                Buff_Stats[s] = math.ceil(float("{:.1f}".format(buff_s)))
+
+
+
 def deal_skills(*args):
+    #### Dmging Skills
     Skills={
         'Class':{'Base1':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
             'Base2':{'type': 'dmg' , 'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
@@ -358,18 +428,27 @@ def deal_skills(*args):
         },
 
         'Elementalist':{
-            'Wildfire':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Wildfire\n\nIgnite your target and all nearby. Deals Magic damage each tick for the duration of 5s.','Dmg': (100 + (0.8*Stats['Mag']) + (1.6 * Stats['Fire'])), 'Cooldown': 3.6},
+            'Wildfire':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Wildfire\n\nIgnite your target and all nearby. Deals Magic damage each tick for the duration of 5s.','Dmg': (100 + (0.8*Buff_Stats['Mag']) + (1.6 * Buff_Stats['Fire'])), 'Cooldown': 3.6},
             
-            'Chain Lightning':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Chain Lightning\n\nBlast your targets with lightning that bounces to nearby targets.\n\nHP:-400','Dmg': (400 + (2*Stats['Mag']) + (4*Stats['Wind'])), 'Cooldown': 3.6},
+            'Chain Lightning':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Chain Lightning\n\nBlast your targets with lightning that bounces to nearby targets.\n\nHP:-400','Dmg': (400 + (2*Buff_Stats['Mag']) + (4*Buff_Stats['Wind'])), 'Cooldown': 3.6},
             
-            'Quake':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Quake\n\nStrike at all enemies near your target with earth magic.\n\nInflicts stun','Dmg': (400 + (3*Stats['Mag']) + (5*Stats['Earth'])), 'Cooldown': 3.6},
+            'Quake':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Quake\n\nStrike at all enemies near your target with earth magic.\n\nInflicts stun','Dmg': (400 + (3*Buff_Stats['Mag']) + (5*Buff_Stats['Earth'])), 'Cooldown': 3.6},
             
-            'Blizzard':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Blizzard\n\nSummons a Blizzard at your target\'s location.\n60% target speed reduced.','Dmg': (400+(3*Stats['Mag']) + (4*Stats['Water'])), 'Cooldown': 3.6},
+            'Blizzard':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Blizzard\n\nSummons a Blizzard at your target\'s location.\n60% target speed reduced.','Dmg': (400+(3*Buff_Stats['Mag']) + (4*Buff_Stats['Water'])), 'Cooldown': 3.6},
         },
 
-        'Soldier':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        'Soldier':{
+            'Pommel Strike':{'type': 'dmg' , 'img':'.\image\skill\Spom.png', 'Skilltext': 'Strike your target with the pommel of your sword and inflicting stun','Dmg': 20 + (0.6*Buff_Stats['Atk']), 'Cooldown': 12.5},
+            'Whirlwind':{'type': 'dmg' , 'img':'.\image\skill\Sw.png', 'Skilltext': 'Swing your sword around you inflicting stun.','Dmg': 100+(3.5*Buff_Stats['Atk']), 'Cooldown': 14},
+            'Leg Trample':{'type': 'dmg' , 'img':'.\image\skill\Sleg.png', 'Skilltext': 'Attack your target\'s legs reducing target Speed by 80% \for the 3s..','Dmg': Buff_Stats['Atk'], 'Cooldown': 22},
+            'Lacerate':{'type': 'dmg' , 'img':'.\image\skill\Slac.png', 'Skilltext': 'Deal a blow to your target\'s vitals, causing them to bleed','Dmg': 50 + (1.25* Buff_Stats['Atk']), 'Cooldown': 16},
+        },
+
+        'Vanguard':{
+            'Commanding Swing':{'type': 'dmg' , 'img':'.\image\skill\Vswing.png', 'Skilltext': 'trike at your target with a steeled will and inflicting stun','Dmg': 150 + (0.55*Buff_Stats['Atk']), 'Cooldown': 4},
+
+            'Righteous Strike':{'type': 'dmg' , 'img':'.\image\skill\Vstrike.png', 'Skilltext': 'Smash your target with righteous glory','Dmg': 250+(1.5*Buff_Stats['Atk']), 'Cooldown': 14.25},
+            'Base3':{'type': 'effect' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
             'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
             'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
             'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
@@ -377,21 +456,12 @@ def deal_skills(*args):
             'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
         },
 
-        'Vanguard':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-        },
-
-        'Warlord':{'Decimate':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Charge a Powerfull Swing. Deals physical Damage and inflicts stun.','Dmg': (3 * Stats['Atk']) + ( 3.5 * Stats['Fire']), 'Cooldown': 14},
-            'Throwing Axe':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Throw a heavy axe dealing physical damage and inflicting Snare','Dmg': 50 + (1.5 * Stats['Atk']), 'Cooldown': 21},
-            'Shockwave':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 20 + (0.5*Stats['Atk']) + (5 * Stats['Earth']), 'Cooldown': 0},
-            'Frenzy Swirl':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 750 + (10*Stats['Atk']), 'Cooldown': 48},
-            'Enrage':{'type': 'buff' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Become fueled by rage! Increase Attack by 50%  while reducing defense by 50%','Duration': 20 , 'Cooldown': 0.25, 'Defense': -0.5, 'Atk': 0.5},
+        'Warlord':{
+            'Decimate':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Charge a Powerfull Swing. Deals physical Damage and inflicts stun.','Dmg': (3 * Buff_Stats['Atk']) + ( 3.5 * Buff_Stats['Fire']), 'Cooldown': 14},
+            'Throwing Axe':{'type': 'dmg' , 'img':'.\image\skill\Waxe.png', 'Skilltext': 'Throw a heavy axe dealing physical damage, inflicting Snare and reducing target Speed by 80% \for the duration.','Dmg': 50 + (1.5 * Buff_Stats['Atk']), 'Cooldown': 21},
+            'Shockwave':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 20 + (0.5*Buff_Stats['Atk']) + (5 * Buff_Stats['Earth']), 'Cooldown': 0},
+            'Frenzy Swirl':{'type': 'dmg' , 'img':'.\image\skill\Wfren.png', 'Skilltext': 'Unleash a devastating whirlwind of blade and blood','Dmg': 750 + (10*Buff_Stats['Atk']), 'Cooldown': 48}, 
+            'Warlord tears':{'type': 'heal' , 'img':'.\image\skill\watears.png', 'Skilltext': 'The sweat the drips down your body replenishes you.','HP': (0.1*Buff_Stats['HP']) + (2.5 * Buff_Stats['Water']), 'Cooldown': 35},
         },
 
         'Cleric':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
@@ -435,10 +505,10 @@ def deal_skills(*args):
         },
 
         'Sniper':{ 
-            'Heavy Shot':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png' ,'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 1000 + (5 * Stats['Speed']), 'Cooldown': 3 * (1 - (Stats['Spell_Haste']/100))},
-            'Air Shot':{'type': 'dmg' , 'img':'.\image\skill\Sn2.png' ,'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 240 + (1.25 * Stats['Speed'] + (1.65 * Stats['Wind'])), 'Cooldown': 2.5 * (1 - (Stats['Spell_Haste']/100))},
-            'Vortex Shot':{'type': 'dmg' , 'img':'.\image\skill\Sn3.png' ,'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 250 +(2 * Stats['Speed'] + 3.5 * Stats['Wind']), 'Cooldown': 2.5 * (1 - (Stats['Spell_Haste']/100))},
-            'Volley':{'type': 'dmg' , 'img':'.\image\skill\Sn5.png', 'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 100 +(0.5 * Stats['Speed']), 'Cooldown': 16.5 * (1 - (Stats['Spell_Haste']/100))},
+            'Heavy Shot':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png' ,'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 1000 + (5 * Buff_Stats['Speed']), 'Cooldown': 3 * (1 - (Buff_Stats['Spell_Haste']/100))},
+            'Air Shot':{'type': 'dmg' , 'img':'.\image\skill\Sn2.png' ,'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 240 + (1.25 * Buff_Stats['Speed'] + (1.65 * Buff_Stats['Wind'])), 'Cooldown': 2.5 * (1 - (Buff_Stats['Spell_Haste']/100))},
+            'Vortex Shot':{'type': 'dmg' , 'img':'.\image\skill\Sn3.png' ,'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 250 +(2 * Buff_Stats['Speed'] + 3.5 * Buff_Stats['Wind']), 'Cooldown': 2.5 * (1 - (Buff_Stats['Spell_Haste']/100))},
+            'Volley':{'type': 'dmg' , 'img':'.\image\skill\Sn5.png', 'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 100 +(0.5 * Buff_Stats['Speed']), 'Cooldown': 16.5 * (1 - (Buff_Stats['Spell_Haste']/100))},
         },
 
         'Monk':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
@@ -556,14 +626,16 @@ def deal_skills(*args):
     for labs in frm_skills.winfo_children():
         labs.destroy()
 
-    for r in range(1,3,1):
-        for c in range(0,6,1):
-            row = (r * 3) - 3  
-            k = (((r * 5) - 5) + c)
-            #print(k)
+    for r in range(0,2,1):
+        for c in range(0,4,1):
+            row = (r * 3)  
+            if r > 0:
+                k = (r*3) + c + 1
+            else:
+                k = c
+
             if k < len(Skills[clicked_c.get()]):
                 skill = list(Skills[clicked_c.get()].keys())[k]
-                #print(skill)
                 imgpath = Skills[clicked_c.get()][skill]['img']
 
                 if Skills[clicked_c.get()][skill]['type'] == 'dmg' :
@@ -581,36 +653,70 @@ def deal_skills(*args):
                     )
                     lbl_dmg.grid(row=row + 1 , column=c, padx=5, pady=0)
 
-                if Skills[clicked_c.get()][skill]['type'] == 'buff' :
+                    ### Cdr ###
+                    cool= float("{:.2f}".format(Skills[clicked_c.get()][skill]['Cooldown']))
+                    lbl_dmg = tk.Label(frm_skills, 
+                    text = f"Cooldown: {cool}",
+                    bg='#3f5946', fg="white", font="Helvetica 10 bold"
+                    )
+                    lbl_dmg.grid(row=row + 2, column=c, padx=5, pady=0)
+
+                if Skills[clicked_c.get()][skill]['type'] == 'heal' :
                     img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((35, 35), Image.ANTIALIAS))
-                    lbl_skill = tk.Button(frm_skills, image=img_skill, bg='#3f5946', command=buff_click)
+                    lbl_skill = tk.Label(frm_skills, image=img_skill, bg='#3f5946')
                     lbl_skill.img = img_skill 
                     lbl_skill.grid(row=row, column=c, padx=10, pady=5)
 
                     CreateToolTip(lbl_skill, Skills[clicked_c.get()][skill]['Skilltext'])
-                    ### Duration ###
-                    Duration= math.ceil(float("{:.1f}".format(Skills[clicked_c.get()][skill]['Duration'])))
-                    lbl_dmg = tk.Label(frm_skills, 
-                    text = f"Duration: {Duration}",
+
+                    HP= math.ceil(float("{:.1f}".format(Skills[clicked_c.get()][skill]['HP'])))
+                    lbl_heal = tk.Label(frm_skills, 
+                    text = f"Hp recovered: {HP}",
                     bg='#3f5946', fg="white", font="Helvetica 10 bold"
                     )
-                    lbl_dmg.grid(row=row + 1 , column=c, padx=5, pady=0)
+                    lbl_heal.grid(row=row + 1 , column=c, padx=5, pady=0)
 
-                ### Cdr ###
-                cool= float("{:.2f}".format(Skills[clicked_c.get()][skill]['Cooldown']))
-                lbl_dmg = tk.Label(frm_skills, 
-                text = f"Cooldown: {cool}",
-                bg='#3f5946', fg="white", font="Helvetica 10 bold"
-                )
-                lbl_dmg.grid(row=row + 2, column=c, padx=5, pady=0)
+                    ### Cdr ###
+                    cool= float("{:.2f}".format(Skills[clicked_c.get()][skill]['Cooldown']))
+                    lbl_cdr = tk.Label(frm_skills, 
+                    text = f"Cooldown: {cool}",
+                    bg='#3f5946', fg="white", font="Helvetica 10 bold"
+                    )
+                    lbl_cdr.grid(row=row + 2, column=c, padx=5, pady=0)
 
-###################
 
-def buff_click(*args):
-    print(frm_skills.winfo_children())
 
-#def deal_buffs(*args):
+
+##### Rebuild Stats Information #####
+
+def rebuild_stats(*args):
+    for labs in frm_stats.winfo_children():
+        labs.destroy()
     
+    lbl_dmg = tk.Label(master=frm_stats,  bg='#3f5946', fg="white" , text="Damage", font="Helvetica 10 bold")
+    lbl_dmg.grid(row=0, column=0, padx=15, pady=5)
+    dmg_numb = tk.Label(master=frm_stats, bg='#3f5946', fg="white", font="Helvetica 10 bold", text="")
+    dmg_numb["text"] = f"{Buff_Stats['Dmg']}"
+    dmg_numb.config(width=5)
+    dmg_numb.grid(row=0, column=1, padx=15, pady=5)
+
+    for c in range(0,2,1):
+        for r in range(1,13,1):
+            col = c * 2
+            row = r
+            keyn = (((c + 1) * 12) - 12) + r
+            if keyn < len(Buff_Stats.keys()):
+                key = list(Buff_Stats.keys())[keyn]
+                lbl_key = tk.Label(master=frm_stats, bg='#3f5946', fg="white", text=key, font="Helvetica 10 bold")
+                lbl_key.grid(row=row, column=col, padx=5, pady=10)
+                lbl_keyres = tk.Label(master=frm_stats, bg='#3f5946', fg="white", font="Helvetica 10 bold", text="")
+                lbl_keyres["text"] = f"{Buff_Stats[key]}"
+                lbl_keyres.config(width=5)
+                lbl_keyres.grid(row=row, column=f"{col + 1}", padx=5, pady=10)
+
+    
+
+##################################################  
 
 #### Save and retreive build definitions
 
@@ -699,7 +805,6 @@ def load_build(load_name):
                 line = i.rstrip()
                 load_content.append(line)
         
-        print(load_content)
         clicked_c.set(load_content[0])
         class_change()
 
@@ -720,35 +825,7 @@ def load_build(load_name):
         calculate()
 
         pops.destroy()
-
-##### Rebuild Stats Information #####
-
-def rebuild_stats(*args):
-    for labs in frm_stats.winfo_children():
-        labs.destroy()
-    
-    lbl_dmg = tk.Label(master=frm_stats,  bg='#3f5946', fg="white" , text="Damage", font="Helvetica 10 bold")
-    lbl_dmg.grid(row=0, column=0, padx=15, pady=5)
-    dmg_numb = tk.Label(master=frm_stats, bg='#3f5946', fg="white", font="Helvetica 10 bold", text="")
-    dmg_numb["text"] = f"{Stats['Dmg']}"
-    dmg_numb.config(width=5)
-    dmg_numb.grid(row=0, column=1, padx=15, pady=5)
-
-    for c in range(0,2,1):
-        for r in range(1,13,1):
-            col = c * 2
-            row = r
-            keyn = (((c + 1) * 12) - 12) + r
-            if keyn < len(Stats.keys()):
-                key = list(Stats.keys())[keyn]
-                lbl_key = tk.Label(master=frm_stats, bg='#3f5946', fg="white", text=key, font="Helvetica 10 bold")
-                lbl_key.grid(row=row, column=col, padx=5, pady=10)
-                lbl_keyres = tk.Label(master=frm_stats, bg='#3f5946', fg="white", font="Helvetica 10 bold", text="")
-                lbl_keyres["text"] = f"{Stats[key]}"
-                lbl_keyres.config(width=5)
-                lbl_keyres.grid(row=row, column=f"{col + 1}", padx=5, pady=10)
-
-       
+   
 
 ############################################################################################################################################################
 ############################################################################################################################################################
@@ -767,7 +844,7 @@ Buff_Stats={'Dmg': 0,'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 0,'Resist': 
 'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0,'Threat': 0
 }
 
-Buff_toggle = [0]
+s_var = {}
 
 ############################################################################################################################################################
 ############################################################################################################################################################
@@ -974,22 +1051,6 @@ mainmenu.add_command(label = "Load Build", command=lambda: ask_load())
 
 window.config(menu = mainmenu)
 
-#savebutton = tk.Button(frm_items, 
-#text="Save Build", 
-#bg='#3f5946',
-#fg='White',
-#font="Helvetica 12 bold",
-#command=lambda: ask_save())
-#savebutton.grid(row=10, column=0, padx=10, pady=10)
-
-#loadbutton = tk.Button(frm_items, 
-#text="Load Build", 
-#bg='#3f5946',
-#fg='White',
-#font="Helvetica 12 bold",
-#command=lambda: ask_load())
-#loadbutton.grid(row=10, column=3, padx=10, pady=10)
-
 ###########################################################################
 ###########################################################################
 ###########################################################################
@@ -1020,7 +1081,6 @@ for r in range(1,3,1):
 
         if k < len(Skills[clicked_c.get()]):
             skill = list(Skills[clicked_c.get()].keys())[k]
-            print(skill)
             imgpath = Skills[clicked_c.get()][skill]['img']
 
             if Skills[clicked_c.get()][skill]['type'] == 'dmg' :
@@ -1033,7 +1093,6 @@ for r in range(1,3,1):
 
                  ### Dmg ###
                 dmg= math.ceil(float("{:.1f}".format(Skills[clicked_c.get()][skill]['Dmg'])))
-                print(Skills[clicked_c.get()][skill]['Dmg'])
                 lbl_dmg = tk.Label(frm_skills, 
                 text = f"Dmg: {dmg}",
                  bg='#3f5946', fg="white", font="Helvetica 10 bold"
