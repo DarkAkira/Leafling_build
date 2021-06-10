@@ -76,7 +76,7 @@ frm_top.grid(row=0, sticky="ew")
 frm_bot.grid(row=1, sticky="nsew", pady=2.5)
 
 frm_class = tk.Frame(frm_top,  bg='blue', width=200, height=200)
-frm_skills = tk.Frame(frm_top, bg='#308a48', width=535, height=200)
+frm_skills = tk.Frame(frm_top, bg='#3f5946', width=535, height=200)
 frm_buffs = tk.Frame(frm_top, bg='#308a48', width=175, height=200)
 
 frm_class.grid(row=0, column=0, sticky="ns")
@@ -146,7 +146,6 @@ def calculate(*args):
     calc_perc()
 
     print(Stats)
-
 
 
     deal_buffs()
@@ -390,9 +389,9 @@ def deal_skills(*args):
     #### Dmging Skills
     Skills={
         'Class':{
-            'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'type': 'debuff' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Effect': '', 'Duration': 0, 'Cooldown': 0},
-            'Base3':{'type': 'heal' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Stat': 0, 'Cooldown': 0},
+        #    'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        #    'Base2':{'type': 'debuff' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Effect': '', 'Duration': 0, 'Cooldown': 0},
+        #    'Base3':{'type': 'heal' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Stat': 0, 'Cooldown': 0},
         },
 
         'Hunter':{
@@ -413,12 +412,15 @@ def deal_skills(*args):
             'Shadowstep':{'type': 'debuff' , 'img':'.\image\skill\ASstep.png', 'Skilltext': 'Step through the shadows, instantly dashing in the direction you\'re moving','Effect': 'Dash', 'Duration': 0, 'Cooldown': 3},
             'Volley of Knives':{'type': 'dmg' , 'img':'.\image\skill\ASvolley.png', 'Skilltext': 'Let loose a volley of throwing knives at your target.','Dmg': 225 + (Buff_Stats['Atk']), 'Cooldown': 6.2},
             'Viper Strike':{'type': 'dmg' , 'img':'.\image\skill\Asviper.png', 'Skilltext': 'Strike your target with a poisoned blade and inflicting silence for 3 s.','Dmg': 25 + (0.35*Buff_Stats['Mag']) + (2*Buff_Stats['Water']), 'Cooldown': 26.5},
-            'Death Mark':{'type': 'debuff' , 'img':'.\image\skill\ASdeath.png', 'Skilltext': 'Mark your target for death, temporarily reducing their defences by 50% \for the duration.','Effect': '-50% \target Defense', 'Duration': 6.5, 'Cooldown': 35},
+            'Death Mark':{'type': 'debuff' , 'img':'.\image\skill\ASdeath.png', 'Skilltext': 'Mark your target for death, temporarily reducing their defences by 50% for the duration.','Effect': '-50% target Def', 'Duration': 6.5, 'Cooldown': 35},
         },
 
         'Saboteur':{
             'Beguile':{'type': 'dmg' , 'img':'.\image\skill\SAbeg.png', 'Skilltext': 'Surprise your foe with a gust of wind, knocking them backwards and inflicting stun for 16.5 s','Dmg': 125 + (Buff_Stats['Mag']) + (4*Buff_Stats['Wind']), 'Cooldown': 16.5},
-
+            'Bear Trap':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Lay down a bear trap that can Snare a target.','Dmg': 200 + (2* Buff_Stats['Mag']) + (10*Buff_Stats['Earth']), 'Cooldown': 5},
+            'Noxious Poison':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Afflict your target with a noxious poison and inflicting Silence for 3 s','Dmg': 70 + (0.65*Buff_Stats['Mag'] + (1.5 * Buff_Stats['Dark'])), 'Cooldown': 15},
+            'Debilitating Toxin':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Afflict your target with a debilitating poison, reducing Armor and Resist by 20% for 6 s','Dmg': 100 + (0.8 * Buff_Stats['Mag']) + (1.25 * Buff_Stats['Earth']), 'Cooldown': 5},
+            
         },
 
         'Acolyte':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
@@ -450,14 +452,12 @@ def deal_skills(*args):
 
         'Vanguard':{
             'Commanding Swing':{'type': 'dmg' , 'img':'.\image\skill\Vswing.png', 'Skilltext': 'trike at your target with a steeled will and inflicting stun','Dmg': 150 + (0.55*Buff_Stats['Atk']), 'Cooldown': 4},
-
             'Righteous Strike':{'type': 'dmg' , 'img':'.\image\skill\Vstrike.png', 'Skilltext': 'Smash your target with righteous glory','Dmg': 250+(1.5*Buff_Stats['Atk']), 'Cooldown': 14.25},
-            'Base3':{'type': 'effect' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+            'Guardian Will':{'type': 'debuff' , 'img':'.\image\skill\Vguard.png', 'Skilltext': 'You steel yourself with the will of a guardian, becoming immune to damage','Effect': 'Immune to Damage', 'Duration': 8.5, 'Cooldown': 65},
+            'Block':{'type': 'debuff' , 'img':'.\image\skill\Vblock.png', 'Skilltext': 'Block an incoming attack, becoming invulnerable for a brief moment.','Effect': 'Invulnerable', 'Duration': 0.6, 'Cooldown': 6},
+            'Shield Formation':{'type': 'debuff' , 'img':'.\image\skill\Vshield.png', 'Skilltext': 'Enter a defensive stance, increasing your defenses for the duration and Cleansing yourself of negative effects.','Effect': 'Cleanse', 'Duration': 4, 'Cooldown': 22},
+            'War Cry':{'type': 'debuff' , 'img':'.\image\skill\Vcry.png', 'Skilltext': 'You scream in pride, challenging all nearby enemies. Inflicts Taunt for the duration','Effect': 'Taunt', 'Duration': 4, 'Cooldown': 14},
+            'War Chant':{'type': 'debuff' , 'img':'.\image\skill\Vchant.png', 'Skilltext': 'Let out a bolsterous roar, granting all nearby allies a Shield for (10% MaxHP)','Effect': 'Shield allies', 'Duration': 4.5, 'Cooldown': 15},
         },
 
         'Warlord':{
@@ -515,14 +515,13 @@ def deal_skills(*args):
             'Volley':{'type': 'dmg' , 'img':'.\image\skill\Sn5.png', 'Skilltext': 'Fires a shot imbued with wind magic.','Dmg': 100 +(0.5 * Buff_Stats['Speed']), 'Cooldown': 16.5 * (1 - (Buff_Stats['Spell_Haste']/100))},
         },
 
-        'Monk':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base2':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base3':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base4':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base5':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base6':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
-            'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
+        'Monk':{
+            'Tiger Strike':{'type': 'dmg' , 'img':'.\image\skill\Mtig.png', 'Skilltext': 'This skill does ....','Dmg': 150 + Buff_Stats['Atk'] + (2* Buff_Stats['Fire']), 'Cooldown': 3},
+            'Falcon Strike':{'type': 'dmg' , 'img':'.\image\skill\Mfal.png', 'Skilltext': 'This skill does ....','Dmg': 150 + Buff_Stats['Atk'] + (2* Buff_Stats['Wind']), 'Cooldown': 3},
+            'Cobra Strike':{'type': 'dmg' , 'img':'.\image\skill\Mcobra.png', 'Skilltext': 'This skill does ....','Dmg': 150 + Buff_Stats['Atk'] + (2* Buff_Stats['Water']), 'Cooldown': 3},
+            'Golem Strike':{'type': 'dmg' , 'img':'.\image\skill\Mgol.png', 'Skilltext': 'This skill does ....','Dmg': 150 + Buff_Stats['Atk'] + (2* Buff_Stats['Earth']), 'Cooldown': 3},
+            'Ki Devastation':{'type': 'dmg' , 'img':'.\image\skill\Mki.png', 'Skilltext': 'This skill does ....','Dmg': 225 + (1.75* Buff_Stats['Atk']), 'Cooldown': 45},
+            'Chakra':{'type': 'heal' , 'img':'.\image\skill\Mchakra.png', 'Skilltext': 'Channel your inner Chakra, restoring Health and Mana and Cleansing yourself of debuffs.','HP': 0.3 * Buff_Stats['HP'], 'Mana': 0.3 * Buff_Stats['Mana'], 'Cooldown': 65},
         },
 
         'Dragonslayer':{'Base1':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
@@ -624,56 +623,78 @@ def deal_skills(*args):
             'Base7':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
             'Base8':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Dmg': 0, 'Cooldown': 0},
         },
+        'Corrupted Jewel':{'Arcane Missiles':{'type': 'dmg' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'Fire a wave of empowered Mana Bolts ','Dmg': 4*Stats['Mag'], 'Cooldown': 20},
+        },
+
+        'Treants Spine': {'Entaglement':{'type': 'debuff' , 'img':'.\image\skill\Sn1.png', 'Skilltext': 'This skill does ....','Effect': 'Snare', 'Duration': 0, 'Cooldown': 0}}
     }
     ### Rebuild Skills ###
 
     for labs in frm_skills.winfo_children():
         labs.destroy()
 
+    skill_dic ={}
+
+    Eqs= {
+        'W': clicked_wep.get(),
+        'Ar': clicked_arm.get(),
+        'O': clicked_off.get(),
+        'Ac': clicked_acc.get(),
+        'S': clicked_soul.get()
+    }
+
+    skill_dic.update(Skills[clicked_c.get()])
+
+    for eq in Eqs.keys():
+        print(Eqs[eq])
+        if Eqs[eq] in Skills.keys():
+            skill_dic.update(Skills[Eqs[eq]])
+    
+    print(skill_dic)
     for r in range(0,2,1):
-        for c in range(0,4,1):
+        for c in range(0,5,1):
             row = (r * 3)  
             if r > 0:
-                k = (r*3) + c + 1
+                k = (r*4) + c + 1
             else:
                 k = c
 
-            if k < len(Skills[clicked_c.get()]):
-                skill = list(Skills[clicked_c.get()].keys())[k]
-                imgpath = Skills[clicked_c.get()][skill]['img']
+            if k < len(skill_dic.keys()):
+                skill = list(skill_dic.keys())[k]
+                imgpath = skill_dic[skill]['img']
 
-                if Skills[clicked_c.get()][skill]['type'] == 'dmg' :
-                    img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((35, 35), Image.ANTIALIAS))
+                if skill_dic[skill]['type'] == 'dmg' :
+                    img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((25, 25), Image.ANTIALIAS))
                     lbl_skill = tk.Label(frm_skills, image=img_skill, bg='#3f5946')
                     lbl_skill.img = img_skill 
                     lbl_skill.grid(row=row, column=c, padx=10, pady=5)
 
-                    CreateToolTip(lbl_skill, Skills[clicked_c.get()][skill]['Skilltext'])
+                    CreateToolTip(lbl_skill, skill_dic[skill]['Skilltext'])
 
-                    dmg= math.ceil(float("{:.1f}".format(Skills[clicked_c.get()][skill]['Dmg'])))
+                    dmg= math.ceil(float("{:.1f}".format(skill_dic[skill]['Dmg'])))
                     lbl_dmg = tk.Label(frm_skills, 
                     text = f"Dmg: {dmg}",
-                    bg='#3f5946', fg="white", font="Helvetica 10 bold"
+                    bg='#3f5946', fg="white", font="Helvetica 8 bold"
                     )
                     lbl_dmg.grid(row=row + 1 , column=c, padx=5, pady=0)
 
                     ### Cdr ###
-                    cool= float("{:.2f}".format(Skills[clicked_c.get()][skill]['Cooldown']))
+                    cool= float("{:.2f}".format(skill_dic[skill]['Cooldown']))
                     lbl_dmg = tk.Label(frm_skills, 
                     text = f"Cooldown: {cool}",
-                    bg='#3f5946', fg="white", font="Helvetica 10 bold"
+                    bg='#3f5946', fg="white", font="Helvetica 8 bold"
                     )
                     lbl_dmg.grid(row=row + 2, column=c, padx=5, pady=0)
 
-                if Skills[clicked_c.get()][skill]['type'] == 'heal' :
-                    img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((35, 35), Image.ANTIALIAS))
+                if skill_dic[skill]['type'] == 'heal' :
+                    img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((25, 25), Image.ANTIALIAS))
                     lbl_skill = tk.Label(frm_skills, image=img_skill, bg='#3f5946')
                     lbl_skill.img = img_skill 
                     lbl_skill.grid(row=row, column=c, padx=10, pady=5)
 
-                    CreateToolTip(lbl_skill, Skills[clicked_c.get()][skill]['Skilltext'])
+                    CreateToolTip(lbl_skill, skill_dic[skill]['Skilltext'])
 
-                    HP= math.ceil(float("{:.1f}".format(Skills[clicked_c.get()][skill]['HP'])))
+                    HP= math.ceil(float("{:.1f}".format(skill_dic[skill]['HP'])))
                     lbl_heal = tk.Label(frm_skills, 
                     text = f"Hp recovered: {HP}",
                     bg='#3f5946', fg="white", font="Helvetica 10 bold"
@@ -681,33 +702,33 @@ def deal_skills(*args):
                     lbl_heal.grid(row=row + 1 , column=c, padx=5, pady=0)
 
                     ### Cdr ###
-                    cool= float("{:.2f}".format(Skills[clicked_c.get()][skill]['Cooldown']))
+                    cool= float("{:.2f}".format(skill_dic[skill]['Cooldown']))
                     lbl_cdr = tk.Label(frm_skills, 
                     text = f"Cooldown: {cool}",
-                    bg='#3f5946', fg="white", font="Helvetica 10 bold"
+                    bg='#3f5946', fg="white", font="Helvetica 8 bold"
                     )
                     lbl_cdr.grid(row=row + 2, column=c, padx=5, pady=0)
 
-                if Skills[clicked_c.get()][skill]['type'] == 'debuff' :
-                    img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((35, 35), Image.ANTIALIAS))
+                if skill_dic[skill]['type'] == 'debuff' :
+                    img_skill = ImageTk.PhotoImage(Image.open(imgpath).resize((25, 25), Image.ANTIALIAS))
                     lbl_skill = tk.Label(frm_skills, image=img_skill, bg='#3f5946')
                     lbl_skill.img = img_skill 
                     lbl_skill.grid(row=row, column=c, padx=10, pady=5)
 
-                    CreateToolTip(lbl_skill, Skills[clicked_c.get()][skill]['Skilltext'])
+                    CreateToolTip(lbl_skill, skill_dic[skill]['Skilltext'])
                     
-                    deb = "Effect: " + str(Skills[clicked_c.get()][skill]['Effect'])
+                    deb = "Effect: " + str(skill_dic[skill]['Effect'])
                     lbl_debuff = tk.Label(frm_skills, 
                     text =  deb,
-                    bg='#3f5946', fg="white", font="Helvetica 10 bold", justify='center', wraplength=150
+                    bg='#3f5946', fg="white", font="Helvetica 8 bold", justify='center', wraplength=100
                     )
                     lbl_debuff.grid(row=row + 1 , column=c, padx=5, pady=0)
 
                     ### Cdr ###
-                    cool= float("{:.2f}".format(Skills[clicked_c.get()][skill]['Cooldown']))
+                    cool= float("{:.2f}".format(skill_dic[skill]['Cooldown']))
                     lbl_cdr = tk.Label(frm_skills, 
                     text = f"Cooldown: {cool}",
-                    bg='#3f5946', fg="white", font="Helvetica 10 bold"
+                    bg='#3f5946', fg="white", font="Helvetica 8 bold"
                     )
                     lbl_cdr.grid(row=row + 2, column=c, padx=5, pady=0)
 
@@ -1134,6 +1155,6 @@ for r in range(1,3,1):
                 )
                 lbl_dmg.grid(row=row + 2, column=c, padx=5, pady=0)
 
-
+create_buff()
 
 window.mainloop()

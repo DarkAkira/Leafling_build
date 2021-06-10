@@ -73,6 +73,10 @@ Weapon={
     'Dmg': 335, 'HP': 0,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 0,'Resist': 45,'Speed': 45,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 5,'Luck': 0,
     'Dodge': 0, 'Fire': 0,'Water': 0,'Wind': 25,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
 
+    'Olympia\'s Herald':{'Class': ['Sniper', 'Hunter'],
+    'Dmg': 400, 'HP': 1650,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 15,'Resist': 15,'Speed': 40,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 5,'Luck': 0,
+    'Dodge': 10, 'Fire': 0,'Water': 0,'Wind': 40,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
+
 ### Swords ###
 
     'Amethyst Challenger':{'Class': ['Soldier', 'Warlord', 'Vanguard', 'Paladin', 'Paladin Wrath', 'Paladin Mercy','Paladin Protector'],
@@ -85,7 +89,7 @@ Weapon={
 
     'Earthen Defender':{'Class': ['Soldier', 'Warlord', 'Vanguard', 'Paladin', 'Paladin Wrath', 'Paladin Mercy','Paladin Protector'],
     'Dmg': 150, 'HP': 3000,'Mana': 0,'Atk': 0,'Mag': 0,'Defense': 75,'Resist': 75,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
-    'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 20,'Light': 0,'Dark': 0, 'Threat': 0, 'Perc':{'Atk': -0.2, 'Mag': -0.2, 'Threat': 100}},
+    'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 20,'Light': 0,'Dark': 0, 'Threat': 10000, 'Perc':{'Atk': -0.2, 'Mag': -0.2}},
 
     'Crystal Phalanx':{'Class': ['Vanguard', 'Dreadknight', 'Paladin', 'Paladin Wrath', 'Paladin Mercy','Paladin Protector'],
     'Dmg': 300, 'HP': 1850,'Mana': 0,'Atk': 20,'Mag': 0,'Defense': 45,'Resist': 45,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
@@ -280,6 +284,10 @@ Weapon={
     'Dmg': 500, 'HP': 750,'Mana': 750,'Atk': 25,'Mag': 0,'Defense': 0,'Resist': 25,'Speed': 25,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
     'Dodge': 0, 'Fire': 25,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},  
 
+    'Ki Manipulator (Saphire)':{'Class': ['Monk'],
+    'Dmg': 500, 'HP': 750,'Mana': 750,'Atk': 25,'Mag': 0,'Defense': 0,'Resist': 25,'Speed': 25,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
+    'Dodge': 0, 'Fire': 0,'Water': 25,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},  
+
 
 }
 
@@ -397,8 +405,11 @@ Offhand={
 
     'Seitsugan':{'Class': ['Ronin'],
     'Dmg': 0, 'HP': 0,'Mana': 0,'Atk': 75,'Mag': 0,'Defense': 0,'Resist': 0,'Speed': 0,'Spell_Haste': 0,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
-    'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0}
+    'Dodge': 0,'Fire': 0,'Water': 0,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
 
+    'Shield of Atlantis':{'Class': ['Vanguard', 'Paladin', 'Dreadknight'],
+    'Dmg': 0, 'HP': 2000,'Mana': 0,'Atk': 15,'Mag': 15,'Defense': 45,'Resist': 65,'Speed': 0,'Spell_Haste': 5,'Lifesteal': 0,'Tenacity': 0,'Crit': 0,'Luck': 0,
+    'Dodge': 0,'Fire': 0,'Water': 35,'Wind': 0,'Earth': 0,'Light': 0,'Dark': 0, 'Threat': 0},
 }
 
 Accessory={
